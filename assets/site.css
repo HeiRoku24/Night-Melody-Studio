@@ -19,13 +19,13 @@ html.en [data-l=ko],html:not(.en) [data-l=en]{display:none!important}
 .hd{position:sticky;top:0;z-index:40;background:rgba(4,13,11,.78);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid rgba(36,69,59,.6)}
 .hd .wrap{display:flex;align-items:center;gap:14px;min-height:64px}
 .brand{display:flex;align-items:center;gap:10px;color:var(--gold);text-decoration:none;font-family:'Do Hyeon',sans-serif;font-size:22px;white-space:nowrap}
-.brand img{width:34px;height:34px}
+.brand img{width:34px;height:34px}.brand .wm{width:auto;height:40px}
 .nav{margin-left:auto;display:flex;align-items:center;gap:4px}
 .nav a{color:var(--mute);text-decoration:none;font-size:15px;padding:10px 10px;border-radius:10px;white-space:nowrap}
 .nav a:hover{color:var(--ink);background:rgba(191,227,218,.08)}
 .lang{display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;border:0;border-radius:12px;background:transparent;color:var(--mute);font:700 14px 'Noto Sans KR',sans-serif;cursor:pointer}
 .lang[aria-pressed=true]{background:var(--gold);color:#2B2000}
-@media(max-width:640px){.nav a.opt{display:none}.brand span{display:none}}
+@media(max-width:640px){.nav a.opt{display:none}}@media(max-width:520px){.brand .wm{display:none}}
 /* buttons */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:50px;padding:0 24px;border-radius:999px;font-family:'Do Hyeon',sans-serif;font-weight:400;font-size:20px;text-decoration:none;white-space:nowrap;transition:transform .15s,background .2s,color .2s}
 .btn.gold{background:linear-gradient(180deg,#FFD86B,var(--gold2));color:#2B2000;box-shadow:0 6px 24px rgba(246,196,69,.25)}
