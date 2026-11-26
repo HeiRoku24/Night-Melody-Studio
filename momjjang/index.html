@@ -186,7 +186,10 @@ a{color:var(--em2)}
 .choice:hover::before,.choice:focus-visible::before,.choice.sel::before{opacity:1}
 .choice.sel,.choice:hover{border-color:#2E5E50;background:#173F33;color:var(--gold)}
 footer{background:#070E0D;color:#8FAEAA;font-size:14px}.flinks{display:flex;flex-wrap:wrap;gap:4px 18px}.flinks a{color:#BFD3CE;text-decoration:none;display:inline-block;padding:8px 0}.flinks a:hover{color:var(--gold)}
-.studio{display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;margin-left:-6px;border-radius:12px}.studio img{width:32px;height:32px}.studio:hover{background:rgba(246,196,69,.12)}
+.studio{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-width:44px;min-height:44px;margin-left:-6px;padding:0 10px 0 6px;border-radius:999px;color:#EAF5F1;text-decoration:none;font-size:14px;font-weight:700;white-space:nowrap;border:1.5px solid rgba(246,196,69,.45);background:rgba(10,18,56,0)}.studio img{width:28px;height:28px}.studio:hover{background:rgba(246,196,69,.14);border-color:var(--gold)}
+@media(max-width:600px){.studio{padding:0;border-color:transparent}}.sep{width:1px;height:22px;background:rgba(234,245,241,.25);margin:0 4px}
+.madeby{background:#0B1715;border-top:1px solid #1C2F2B}.madeby .wrap{padding-top:26px;padding-bottom:26px;display:flex;flex-wrap:wrap;align-items:center;gap:14px 18px}.madeby img{width:52px;height:52px;flex:none}.madeby p{margin:0;flex:1 1 220px;color:#C9DCD7;font-size:15px;line-height:1.5}.madeby p b{display:block;font-family:'Do Hyeon',sans-serif;font-weight:400;font-size:21px;color:var(--gold)}.madeby .homebtn{min-height:48px;font-size:19px;padding:0 22px}
+@media(max-width:380px){.logo{font-size:20px}.lang{min-width:40px}}
 /* lightbox */
 .lb{position:fixed;inset:0;z-index:90;background:rgba(7,14,13,.86);display:none;place-items:center;padding:20px;cursor:zoom-out}
 .lb.open{display:grid}.lb img,.lb video{max-height:90vh;max-width:100%;width:auto;border-radius:24px;border:6px solid #000}.lb video{aspect-ratio:780/1688;height:90vh;object-fit:cover}.lb [hidden]{display:none}
@@ -301,7 +304,7 @@ html:not(.fx) .fairy{display:none}
 <body>
 <header class="hd" id="hd">
 <div class="wrap">
-<span style="display:flex;align-items:center;gap:8px"><a class="studio" href="../index.html" aria-label="나이트 멜로디 스튜디오 홈" data-ia="studioHome"><img src="../assets/logo/symbol.svg" alt="" width="32" height="32"></a><a class="logo" href="#top" data-i="logo">몸짱용사</a></span>
+<span style="display:flex;align-items:center;gap:8px"><a class="studio" href="../index.html" aria-label="나이트 멜로디 스튜디오 홈" data-ia="studioHome"><img src="../assets/logo/symbol.svg" alt="" width="28" height="28"><span class="hide-s" data-i="studioTxt">스튜디오</span></a><span class="sep hide-s" aria-hidden="true"></span><a class="logo" href="#top" data-i="logo">몸짱용사</a></span>
 <nav style="display:flex;align-items:center;gap:6px" aria-label="Language">
 <button type="button" class="lang" data-set="ko" aria-pressed="true">KO</button>
 <button type="button" class="lang" data-set="en" aria-pressed="false">EN</button>
@@ -565,6 +568,7 @@ html:not(.fx) .fairy{display:none}
 </section>
 </main>
 
+<section class="madeby"><div class="wrap"><img src="../assets/logo/symbol.svg" alt=""><p><b>NIGHT MELODY STUDIO</b><span data-i="madeTxt">몸짱용사는 나이트 멜로디 스튜디오가 만들었어요.</span></p><a class="btn gold homebtn" href="../index.html" data-i="madeBtn">스튜디오 홈으로 ▶</a></div></section>
 <footer><div class="wrap" style="padding-top:28px;padding-bottom:28px;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px 20px"><span data-i="copy">© 2026 나이트 멜로디 스튜디오</span><span class="flinks"><a href="../index.html" data-i="copy2">Night Melody Studio</a><a href="../privacy/index.html" data-i="fPrivacy">개인정보처리방침</a><a href="../support/index.html" data-i="fSupport">고객지원</a></span></div></footer>
 
 <div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Screenshot"><img alt=""><video muted loop playsinline></video><button type="button" aria-label="닫기" data-ia="close">×</button></div>
