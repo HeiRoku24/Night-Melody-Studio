@@ -18,23 +18,14 @@ html.en [data-l=ko],html:not(.en) [data-l=en]{display:none!important}
 /* header */
 .hd{position:sticky;top:0;z-index:40;background:rgba(4,13,11,.78);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-bottom:1px solid rgba(36,69,59,.6)}
 .hd .wrap{display:flex;align-items:center;gap:14px;min-height:64px}
-.brand{flex:none;display:flex;align-items:center;gap:10px;color:var(--gold);text-decoration:none;font-family:'Do Hyeon',sans-serif;font-size:22px;white-space:nowrap}
-.brand img{width:34px;height:34px;flex:none}
-.wmt{font-family:'Cormorant Garamond',serif;font-weight:700;line-height:1;white-space:nowrap;letter-spacing:.06em}
-.wm1,.wm2{background-clip:text;-webkit-background-clip:text;color:transparent;-webkit-text-fill-color:transparent}
-.wm1{background-image:linear-gradient(180deg,#FFFFFF 0%,#DDF1EB 45%,#9CC7BC 100%)}
-.wm2{background-image:linear-gradient(180deg,#FFF1B8 0%,#F6C445 50%,#C08A1C 100%);letter-spacing:.14em}
-.brand .wmt{font-size:24px}
+.brand{display:flex;align-items:center;gap:10px;color:var(--gold);text-decoration:none;font-family:'Do Hyeon',sans-serif;font-size:22px;white-space:nowrap}
+.brand img{width:34px;height:34px}.brand .wm{width:auto;height:40px}
 .nav{margin-left:auto;display:flex;align-items:center;gap:4px}
 .nav a{color:var(--mute);text-decoration:none;font-size:15px;padding:10px 10px;border-radius:10px;white-space:nowrap}
 .nav a:hover{color:var(--ink);background:rgba(191,227,218,.08)}
 .lang{display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;border:0;border-radius:12px;background:transparent;color:var(--mute);font:700 14px 'Noto Sans KR',sans-serif;cursor:pointer}
 .lang[aria-pressed=true]{background:var(--gold);color:#2B2000}
-@media(max-width:640px){.nav a.opt{display:none}}
-@media(min-width:641px) and (max-width:740px){.brand .wm2{display:none}}
-@media(max-width:600px){.brand .wm2{display:none}.brand .wmt{font-size:22px}}
-@media(max-width:440px){.nav a{display:none}}
-@media(max-width:360px){.brand .wmt{font-size:18px;letter-spacing:.04em}.brand{gap:6px}.brand img{width:30px;height:30px}}
+@media(max-width:640px){.nav a.opt{display:none}}@media(max-width:520px){.brand .wm{display:none}}
 /* buttons */
 .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;min-height:50px;padding:0 24px;border-radius:999px;font-family:'Do Hyeon',sans-serif;font-weight:400;font-size:20px;text-decoration:none;white-space:nowrap;transition:transform .15s,background .2s,color .2s}
 .btn.gold{background:linear-gradient(180deg,#FFD86B,var(--gold2));color:#2B2000;box-shadow:0 6px 24px rgba(246,196,69,.25)}
@@ -46,7 +37,7 @@ html.en [data-l=ko],html:not(.en) [data-l=en]{display:none!important}
 .ft .wrap{padding-top:40px;padding-bottom:40px;display:grid;gap:22px;grid-template-columns:minmax(0,1fr)}
 @media(min-width:760px){.ft .wrap{grid-template-columns:minmax(0,1.2fr) minmax(0,1fr);align-items:start}}
 .ft .who{display:flex;gap:14px;align-items:center}.ft .who img{width:52px;height:52px}
-.ft .who b{display:block;font-size:22px;margin-bottom:4px;white-space:normal}.wmt .wm1,.wmt .wm2{white-space:nowrap}
+.ft .who b{display:block;color:var(--gold);font-family:'Do Hyeon',sans-serif;font-weight:400;font-size:21px}
 .ft ul{list-style:none;margin:0;padding:0;display:flex;flex-wrap:wrap;gap:6px 18px}
 .ft li a{color:var(--mute);text-decoration:none;display:inline-block;padding:6px 0}.ft li a:hover{color:var(--gold)}
 .ft .mail{color:var(--ink);white-space:nowrap}
