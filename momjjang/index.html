@@ -1,0 +1,575 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>몸짱용사 소개</title>
+<meta name="description" content="몸짱용사가 되어 마왕을 토벌하는 홈트레이닝 RPG">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Do+Hyeon&family=Noto+Sans+KR:wght@400;500;700;900&family=Press+Start+2P&display=swap" rel="stylesheet">
+<style>
+/* VOICE occasion: a retro RPG title screen that is also a workout app
+   IDEA the app itself: night title screen, dialogue boxes, HUD bars, quest log
+   PICTURE real app screens in a phone that follows the scroll, plus HUD widgets
+   COLOUR forest night #0B2A22, mint #E8F1EE, gold #F6C445, emerald #46E0A5, demon #241A42
+   TYPE Do Hyeon titles, Noto Sans KR text, Press Start 2P for HUD numbers
+   LAYOUT pinned story scenes on desktop and phone; static fallback stacks */
+:root{color-scheme:light;--night:#0B2A22;--night2:#154A39;--mint:#E8F1EE;--ink:#10231F;--mute:#4D6964;--gold:#F6C445;--gold2:#F1B90F;--em:#46E0A5;--em2:#0F6B50;--card:#fff;--line:#C8DBD4;--demon:#241A42;--red:#DC3E31}
+*{box-sizing:border-box;min-width:0}
+html{scroll-behavior:smooth}
+body{margin:0;background:var(--mint);color:var(--ink);font:16px/1.65 'Noto Sans KR',system-ui,sans-serif;word-break:keep-all;overflow-wrap:break-word;overflow-x:clip}
+img{max-width:100%;display:block}
+a{color:var(--em2)}
+.px{font-family:'Press Start 2P',monospace;letter-spacing:0;word-break:normal}
+.dh{font-family:'Do Hyeon',sans-serif;font-weight:400}
+.wrap{max-width:1120px;margin:0 auto;padding-left:max(5vw,16px);padding-right:max(5vw,16px)}
+.band{padding-top:clamp(64px,9vw,110px);padding-bottom:clamp(64px,9vw,110px);position:relative}
+.h2{margin:0 0 14px;font-family:'Do Hyeon',sans-serif;font-weight:400;font-size:clamp(32px,4.4vw,46px);line-height:1.15;text-wrap:balance}
+.lead{margin:0 0 24px;font-size:17px;color:#2E4843;max-width:34em}
+.tag{display:inline-block;font-size:13px;font-weight:700;padding:4px 12px;border-radius:999px;margin:0 0 14px;white-space:nowrap}
+.row{display:flex;flex-wrap:wrap;gap:40px 64px;align-items:center}.row>.txt{flex:1 1 360px}.row>.ph{flex:0 1 270px;margin:0 auto}
+@media(min-width:760px){.rev>.ph{order:-1}}
+.ph{margin:0;width:100%;max-width:270px;cursor:zoom-in;background:none;border:0;padding:0}
+.ph img,.ph video{display:block;width:100%;height:auto;aspect-ratio:780/1688;object-fit:cover;border-radius:30px;border:6px solid #10231F;box-shadow:0 10px 0 rgba(16,35,31,.18);background:#10231F}
+.card{background:#fff;border:2px solid var(--line);border-radius:20px;box-shadow:0 4px 0 #B7CBC4;padding:18px 20px;transition:transform .2s,box-shadow .2s}
+.list{margin:0;padding:0;list-style:none;display:flex;flex-direction:column;gap:12px}
+.list li{display:flex;gap:12px;align-items:flex-start}.dot{flex:none;width:12px;height:12px;margin-top:8px;border-radius:3px;background:var(--gold2);border:2px solid var(--ink);transform:rotate(45deg)}
+.btn{display:inline-flex;align-items:center;justify-content:center;min-height:52px;padding:0 26px;border-radius:16px;font-family:'Do Hyeon',sans-serif;font-size:21px;text-decoration:none;white-space:nowrap;border:0;cursor:pointer;position:relative}
+.gold{background:var(--gold2);color:#2B2000;box-shadow:0 6px 0 #A9820A;transition:transform .08s,box-shadow .08s}
+.gold:hover{background:var(--gold);color:#2B2000}.gold:active{transform:translateY(5px);box-shadow:0 1px 0 #A9820A}
+:focus-visible{outline:3px solid var(--em);outline-offset:3px}
+/* header */
+.hd{position:fixed;top:0;left:0;right:0;z-index:50;transition:transform .35s,background .3s}
+.hd.hide{transform:translateY(-100%)}.hd.solid{background:rgba(9,34,27,.78);backdrop-filter:blur(14px);-webkit-backdrop-filter:blur(14px)}
+.hd .wrap{display:flex;align-items:center;justify-content:space-between;gap:10px;min-height:64px}
+.logo{color:var(--gold);text-decoration:none;font-family:'Do Hyeon',sans-serif;font-size:24px;text-shadow:0 3px 0 #2B2000;white-space:nowrap}
+.lang{display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;border-radius:12px;font-weight:700;font-size:14px;border:0;background:transparent;color:#EAF5F1;cursor:pointer;font-family:inherit}
+.lang[aria-pressed=true]{background:var(--gold);color:#2B2000}
+@media(max-width:600px){.hide-s{display:none}}
+/* night */
+.night{position:relative;background:linear-gradient(180deg,#0B2A22 0%,#0F3328 70%,#154A39 100%);color:#EAF5F1;overflow:clip}
+.sky{position:absolute;inset:0;width:100%;height:100%;pointer-events:none}
+.night>*:not(.sky){position:relative}
+.title{min-height:100svh;display:flex;align-items:center;padding-top:96px;padding-bottom:64px}
+.title h1{margin:0;font-family:'Do Hyeon',sans-serif;font-weight:400;font-size:clamp(64px,10vw,112px);line-height:1;color:var(--gold);text-shadow:0 6px 0 #3A2A00,0 0 30px rgba(246,196,69,.3)}
+.title h1 .ch{display:inline-block;white-space:pre}.title h1 .w{display:inline-block;white-space:nowrap}
+.pill{display:inline-block;margin:18px 0 22px;padding:6px 18px;border-radius:999px;background:#08201A;font-family:'Do Hyeon',sans-serif;font-size:22px}
+.press{display:inline-flex;align-items:center;gap:10px;min-height:48px;color:var(--gold);font-size:13px;text-decoration:none;animation:blink 1.1s steps(2) infinite}
+@keyframes blink{50%{opacity:.25}}
+.float{animation:float 4.5s ease-in-out infinite}@keyframes float{50%{transform:translateY(-12px)}}
+/* dialogue */
+.dlg{background:#08201A;border:4px solid var(--gold);border-radius:16px;box-shadow:0 0 0 4px #08201A,0 10px 0 rgba(0,0,0,.35);color:#F2FAF6;padding:20px 22px 22px;display:grid;grid-template-columns:auto 1fr;gap:18px;align-items:start;position:relative}
+.dlg .face{width:88px;height:88px;border-radius:12px;border:3px solid var(--gold);object-fit:cover;background:#DDEBFF}
+.dlg .who{display:inline-block;margin:-36px 0 8px;padding:4px 12px;background:var(--gold);color:#2B2000;border-radius:8px;font-family:'Do Hyeon',sans-serif;font-size:18px}
+.dlg .say{font-size:clamp(18px,2.4vw,24px);line-height:1.6;min-height:3.2em;margin:0}
+.dlg .next{position:absolute;right:18px;bottom:10px;color:var(--gold);font-size:12px;animation:blink 1s steps(2) infinite}
+@media(max-width:520px){.dlg{grid-template-columns:1fr}.dlg .face{width:64px;height:64px}}
+/* stats */
+.stat{background:#08201A;border:4px solid #2E5E50;border-radius:18px;padding:22px;color:#EAF5F1;position:relative}
+.stat h3{margin:0 0 16px;color:var(--gold);font-size:12px}
+.srow{display:grid;grid-template-columns:7.5em minmax(0,1fr) 4.2em;gap:12px;align-items:center;padding:7px 0}
+.srow span:first-child{font-size:15px;color:#C3DCD3}
+.bar{height:14px;border-radius:7px;background:#1A3A32;overflow:hidden;border:2px solid #061410}.bar i{display:block;height:100%;width:100%;background:linear-gradient(90deg,#46E0A5,#F6C445);border-radius:5px}
+.srow b{font-size:13px;text-align:right;color:var(--gold);white-space:nowrap}
+.lvup{position:absolute;right:16px;top:-18px;background:var(--red);color:#fff;font-size:12px;padding:8px 12px;border-radius:10px;box-shadow:0 4px 0 #7A1A12;opacity:1}
+/* day story */
+.day{background:#fff}
+.xp{display:flex;align-items:center;gap:12px;margin:0 0 22px}.xp .bar{flex:1;height:18px;border-radius:9px}.xp .bar i{background:linear-gradient(90deg,#F1B90F,#F6C445)}
+.xp b{font-size:11px;white-space:nowrap;color:#8A5A00}
+.daygrid{display:grid;grid-template-columns:minmax(0,1fr) 280px;gap:48px;align-items:start}
+.steps{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:12px}
+.step{border:2px solid var(--line);border-radius:18px;padding:14px 18px;background:#F7FBF9;box-shadow:0 4px 0 #D3E2DC;position:relative}
+.step h3{margin:0;font-size:19px;display:flex;align-items:center;gap:10px}
+.step h3 .chk{flex:none;width:22px;height:22px;border-radius:6px;border:2px solid var(--ink);background:#fff;display:inline-grid;place-items:center;font-size:12px;color:#fff}
+.step p{margin:6px 0 0;color:var(--mute);font-size:15px}
+.step .simg{margin:14px auto 0;max-width:240px}
+.phone{position:relative;width:100%;max-width:280px;aspect-ratio:780/1688;border-radius:32px;border:6px solid #10231F;background:#10231F;overflow:hidden;box-shadow:0 10px 0 rgba(16,35,31,.18)}
+.rot{display:block;position:relative}.rot video+video{position:absolute;inset:0;height:100%}.rot video{transition:opacity .8s}.rot video:not(.on){opacity:0}
+.phone video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;opacity:0;transition:opacity .45s,transform .45s;transform:scale(1.03)}.phone video.on{opacity:1;transform:none}
+.plus{position:absolute;right:14px;top:10px;font-size:11px;color:#8A5A00;opacity:0}
+/* fever */
+.fever{background:#10231F;color:#EAF5F1}
+.hud{display:flex;flex-wrap:wrap;gap:14px;align-items:center;margin:0 0 26px}
+.ring{width:132px;height:132px;border-radius:50%;border:6px solid var(--em);display:grid;place-items:center;box-shadow:0 0 0 0 rgba(70,224,165,.5);flex:none}
+.ring b{font-size:18px;color:var(--gold)}
+.go{align-self:flex-start;font-size:28px;color:var(--gold);text-shadow:0 4px 0 #3A2A00;opacity:0}
+.spd{display:flex;gap:8px}.spd span{font-size:10px;padding:8px 10px;border-radius:10px;background:#1B3236;color:#8FAEAA}.spd span.on{background:var(--gold);color:#2B2000}
+/* demon */
+.demon{background:#241A42;color:#F4EEF8}
+.boss{background:#1A1233;border:4px solid #4E3A86;border-radius:20px;padding:14px 14px 16px;position:relative;overflow:hidden;box-shadow:0 10px 0 rgba(0,0,0,.25)}
+.dgrid{display:grid;grid-template-columns:minmax(0,1fr);gap:32px;align-items:center}
+@media(min-width:900px){.dgrid{grid-template-columns:minmax(0,1fr) minmax(0,1.05fr);gap:48px}}
+.bosswrap{width:min(560px,100%);margin:0 auto}
+.hitbtn{display:block;width:100%;padding:0;border:0;background:radial-gradient(120% 90% at 70% 60%,#3B2A6B,#1A1233 70%);border-radius:12px;cursor:crosshair;position:relative;overflow:hidden;font:inherit;color:inherit;touch-action:manipulation;-webkit-tap-highlight-color:transparent}
+.hitbtn .dsvg{display:block;width:100%;height:auto;position:relative}
+.aura{position:absolute;left:58%;top:6%;width:38%;height:90%;border-radius:50%;background:radial-gradient(closest-side,rgba(181,140,255,.55),rgba(181,140,255,0));animation:aura 2.4s ease-in-out infinite alternate;pointer-events:none}
+@keyframes aura{from{transform:scale(.9);opacity:.55}to{transform:scale(1.12);opacity:1}}
+.hflash{position:absolute;inset:0;background:#fff;opacity:0;pointer-events:none;mix-blend-mode:overlay}
+.hflash.on{animation:hflash .28s ease-out}@keyframes hflash{0%{opacity:.85}100%{opacity:0}}
+#dkHit{transform-box:fill-box;transform-origin:50% 100%;transition:transform .5s cubic-bezier(.3,1.6,.5,1),opacity .5s}
+#dkHit.hit{animation:recoil .42s cubic-bezier(.2,.8,.3,1)}
+@keyframes recoil{0%{transform:translateX(0) rotate(0) scale(1)}20%{transform:translateX(9px) rotate(7deg) scale(.94,1.04)}45%{transform:translateX(-5px) rotate(-4deg) scale(1.04,.97)}70%{transform:translateX(2px) rotate(2deg)}100%{transform:none}}
+.dsvg.hurt{animation:hurt .32s steps(2)}@keyframes hurt{0%,100%{filter:none}50%{filter:brightness(1.9) saturate(1.6) hue-rotate(-40deg)}}
+.demon.fx-win #dkHit{transform:translateY(8px) rotate(14deg) scale(.92);opacity:.55}
+.slash{position:absolute;width:120px;height:10px;margin:-5px 0 0 -60px;border-radius:50%;background:linear-gradient(90deg,transparent,#fff 40%,#FFE9A8 60%,transparent);box-shadow:0 0 14px #fff;pointer-events:none;transform:rotate(-35deg) scaleX(0);animation:slash .32s ease-out forwards}
+@keyframes slash{0%{transform:rotate(-35deg) scaleX(0);opacity:1}40%{transform:rotate(-35deg) scaleX(1.1);opacity:1}100%{transform:rotate(-35deg) scaleX(1.25);opacity:0}}
+.againrow{margin:18px 0 0;text-align:center;visibility:hidden;opacity:0;transition:opacity .3s}.demon.fx-win .againrow{visibility:visible;opacity:1}.again{min-height:46px;font-size:19px}
+.atkhint{animation:blink 1.1s steps(2) infinite}
+.demon.fx-win .atkhint{visibility:hidden}
+.sr{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap;margin:0}
+.hp{display:flex;align-items:center;gap:10px;margin:14px 0 0}.hp span{font-size:11px;color:#FF8A6B}.hp .bar{flex:1;height:16px;background:#3A2A5E}.hp .bar i{background:linear-gradient(90deg,#FF6A5B,#FFB36B)}
+.dmg{position:absolute;z-index:2;font-size:18px;color:#fff;text-shadow:0 3px 0 #7A1A12;opacity:0;pointer-events:none}
+.win{position:absolute;inset:0;display:grid;place-content:center;justify-items:center;gap:8px;background:rgba(26,18,51,.88);opacity:0;visibility:hidden;text-align:center;padding:8px}
+.win .chest{margin-top:12px}@media(max-width:420px){.win .chest{width:64px;height:50px;margin-top:10px}.win .chest .base{height:30px}.win .chest .lid{height:22px}.win .chest .lock{top:16px}.win{font-size:14px}}
+.win .px{color:var(--gold);font-size:clamp(18px,3vw,26px);text-shadow:0 4px 0 #3A2A00}
+.chest{width:84px;height:64px;position:relative}.chest .base{position:absolute;left:0;right:0;bottom:0;height:40px;background:#B5762A;border:4px solid #3A2207;border-radius:6px}.chest .lid{position:absolute;left:0;right:0;top:0;height:28px;background:#D08B33;border:4px solid #3A2207;border-radius:14px 14px 4px 4px;transform-origin:10% 100%}.chest .lock{position:absolute;left:50%;top:22px;width:14px;height:16px;margin-left:-7px;background:var(--gold);border:3px solid #3A2207;border-radius:3px;z-index:1}
+.demon .mini{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,150px),1fr));gap:12px;margin-top:22px}
+.demon .mini div{background:#33285A;border-radius:18px;padding:14px 16px}.demon .mini strong{font-family:'Do Hyeon',sans-serif;font-weight:400;font-size:24px;color:var(--gold)}.demon .mini p{margin:4px 0 0;font-size:15px;color:#D9CFEA}
+.demon.fx-win .win{opacity:1;visibility:visible}
+/* loot */
+.loot{background:#0F1D20;color:#EAF5F1}
+.lootbox{position:relative;height:440px;border-radius:24px;background:radial-gradient(120% 80% at 50% 0%,#1B3236,#0B1517);border:3px solid #1F4A45;overflow:hidden;margin-top:8px;touch-action:pan-y}
+.items{list-style:none;margin:0;padding:18px;display:flex;flex-wrap:wrap;gap:10px}
+.it{display:inline-flex;align-items:center;gap:8px;padding:10px 16px;border-radius:999px;background:#18292C;border:2px solid #5E7A76;font-weight:700;font-size:15px;white-space:nowrap;user-select:none;-webkit-user-select:none;color:#DDE8E5}
+.it::before{content:'';width:10px;height:10px;border-radius:3px;background:#8FAEAA;transform:rotate(45deg)}
+.it.r{border-color:#6FA8FF;color:#CFE0FF}.it.r::before{background:#6FA8FF}
+.it.l{border-color:var(--gold);color:#FFE9A8;box-shadow:0 0 14px rgba(246,196,69,.45)}.it.l::before{background:var(--gold)}
+.phys .items{position:absolute;inset:0;padding:0}.phys .it{position:absolute;left:0;top:0;cursor:grab;will-change:transform}
+.legend{display:flex;flex-wrap:wrap;gap:14px;margin:0 0 6px;font-size:14px;color:#A9C0BC}
+.hint-touch{display:none}@media(pointer:coarse){.hint-touch{display:inline}.hint-mouse{display:none}}
+/* guild */
+.guild{background:#fff}
+.medal{position:relative;margin:0 auto;width:clamp(190px,34vh,290px);aspect-ratio:150/124;flex:none}
+.medal .bimg{position:absolute;inset:0;width:100%;height:100%;filter:drop-shadow(0 8px 0 rgba(16,35,31,.12))}.medal .bsvg{display:block;width:100%;height:100%}
+.medal .nxt{opacity:0}
+.medal .rays{position:absolute;left:50%;top:50%;width:130%;aspect-ratio:1;translate:-50% -50%;border-radius:50%;background:repeating-conic-gradient(from 0deg,rgba(246,196,69,.55) 0 8deg,rgba(246,196,69,0) 8deg 24deg);-webkit-mask:radial-gradient(closest-side,#000 30%,transparent 100%);mask:radial-gradient(closest-side,#000 30%,transparent 100%);opacity:0;pointer-events:none}
+.medal.up .cur{animation:bOut .55s ease-in forwards}
+.medal.up .nxt{animation:bIn .75s cubic-bezier(.3,1.5,.5,1) .18s both}
+.medal.up .rays{animation:rays 1.1s ease-out}
+.medal.down .cur{animation:fadeO .3s forwards}.medal.down .nxt{animation:fadeI .3s both}
+@keyframes bOut{0%{opacity:1;transform:none;filter:brightness(1) blur(0)}60%{opacity:.7;filter:brightness(2.4) blur(2px)}100%{opacity:0;transform:scale(1.18);filter:brightness(3) blur(8px)}}
+@keyframes bIn{0%{opacity:0;transform:scale(.55) rotate(-8deg);filter:brightness(3) blur(6px)}55%{opacity:1;filter:brightness(1.6) blur(0)}100%{opacity:1;transform:none;filter:drop-shadow(0 8px 0 rgba(16,35,31,.12))}}
+@keyframes rays{0%{opacity:0;rotate:0deg;scale:.6}25%{opacity:1}100%{opacity:0;rotate:60deg;scale:1.15}}
+@keyframes fadeO{to{opacity:0}}@keyframes fadeI{from{opacity:0}to{opacity:1}}
+.rkline{margin:0;display:flex;align-items:baseline;justify-content:center;gap:12px;flex-wrap:wrap}.rkline b{font-size:clamp(24px,3.6vh,32px);font-weight:400;line-height:1.1}.rkline .px{font-size:10px;color:var(--mute)}
+.ranks{list-style:none;margin:18px 0 0;padding:0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,108px),1fr));gap:10px}
+.ranks li{padding:12px 4px;text-align:center;font-weight:700;font-size:15px;white-space:nowrap;border-radius:16px;background:#fff;border:2px solid var(--b);color:var(--b);box-shadow:0 4px 0 #D3E2DC;transition:transform .2s,background .2s,color .2s}
+.ranks li.on{background:var(--c);color:var(--t);transform:translateY(-4px)}
+/* kingdom */
+.bld{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,220px),1fr));gap:14px}
+.flip{position:relative;height:200px;perspective:900px;border:0;padding:0;background:none;cursor:pointer;text-align:left;font:inherit;color:inherit}
+.flip .f,.flip .b{position:absolute;inset:0;border-radius:20px;padding:18px 20px;backface-visibility:hidden;-webkit-backface-visibility:hidden;transition:transform .5s,filter .6s,opacity .6s}
+.flip .f{background:#fff;border:2px solid var(--line);box-shadow:0 4px 0 #B7CBC4;display:flex;flex-direction:column;gap:8px}
+.flip .b{background:#10231F;border:2px solid var(--gold2);box-shadow:0 4px 0 #D9B85C;transform:rotateY(180deg);padding:0;overflow:hidden}
+.flip .b video{position:absolute;inset:0;width:100%;height:100%;object-fit:cover;object-position:50% 100%}
+.flip .cap{position:absolute;left:0;right:0;top:0;padding:10px 14px 24px;background:linear-gradient(0deg,rgba(16,35,31,0),rgba(16,35,31,.8) 34%,rgba(16,35,31,.92))}
+.flip[aria-pressed=true] .f{transform:rotateY(-180deg)}.flip[aria-pressed=true] .b{transform:rotateY(0)}
+@media(hover:hover){.flip:hover .f{transform:rotateY(-180deg)}.flip:hover .b{transform:rotateY(0)}}
+.flip svg{width:44px;height:44px}
+.flip b{font-size:20px}.flip .st{font-size:9px;color:var(--em2)}
+.flip .b strong{display:block;font-family:'Do Hyeon',sans-serif;font-weight:400;font-size:20px;line-height:1.15;color:var(--gold);text-shadow:0 2px 0 #000}.flip .b p{margin:3px 0 0;font-size:13px;line-height:1.45;color:#EAF5F1}
+.spark{position:fixed;width:8px;height:8px;border-radius:2px;pointer-events:none;z-index:80;background:var(--gold)}
+/* run */
+.road{position:relative;height:96px;margin:10px 0 22px;border-radius:18px;background:#fff;border:2px solid var(--line);box-shadow:0 4px 0 #B7CBC4;overflow:hidden}
+.road::before{content:'';position:absolute;left:20px;right:20px;top:58px;border-top:4px dashed #C8DBD4}
+.road .done{position:absolute;left:20px;top:58px;height:4px;background:var(--em);width:calc((100% - 40px) * var(--p,1))}
+.road .hero{position:absolute;top:40px;left:calc(20px + (100% - 40px) * var(--p,1));width:26px;height:26px;margin-left:-13px;border-radius:50%;background:var(--gold2);border:3px solid var(--ink)}
+.pal{position:absolute;top:12px;display:flex;flex-direction:column;align-items:center;gap:2px;font-size:11px;font-weight:700;color:var(--ink);transform:translateX(-50%);transition:opacity .4s,transform .4s}
+.pal i{width:30px;height:30px;border-radius:50%;border:3px solid var(--ink);display:grid;place-items:center;font-style:normal}
+.pal.off{opacity:.25}
+.km{display:flex;align-items:baseline;gap:10px}.km b{font-size:clamp(26px,4vw,36px);color:var(--em2)}.km span{font-size:12px;color:var(--mute)}
+/* final */
+.final{padding-top:clamp(80px,10vw,130px);padding-bottom:clamp(80px,10vw,130px)}
+.choices{list-style:none;margin:14px 0 0;padding:0;display:flex;gap:10px;flex-wrap:wrap}
+.choice{display:inline-flex;align-items:center;gap:10px;min-height:48px;padding:0 18px;border-radius:12px;font-family:'Do Hyeon',sans-serif;font-size:22px;color:#F2FAF6;text-decoration:none;background:transparent;border:2px solid transparent;cursor:pointer}
+.choice::before{content:'▶';font-size:14px;color:var(--gold);opacity:0}
+.choice:hover::before,.choice:focus-visible::before,.choice.sel::before{opacity:1}
+.choice.sel,.choice:hover{border-color:#2E5E50;background:#173F33;color:var(--gold)}
+footer{background:#070E0D;color:#8FAEAA;font-size:14px}.flinks{display:flex;flex-wrap:wrap;gap:4px 18px}.flinks a{color:#BFD3CE;text-decoration:none;display:inline-block;padding:8px 0}.flinks a:hover{color:var(--gold)}
+.studio{display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;margin-left:-6px;border-radius:12px}.studio img{width:32px;height:32px}.studio:hover{background:rgba(246,196,69,.12)}
+/* lightbox */
+.lb{position:fixed;inset:0;z-index:90;background:rgba(7,14,13,.86);display:none;place-items:center;padding:20px;cursor:zoom-out}
+.lb.open{display:grid}.lb img,.lb video{max-height:90vh;max-width:100%;width:auto;border-radius:24px;border:6px solid #000}.lb video{aspect-ratio:780/1688;height:90vh;object-fit:cover}.lb [hidden]{display:none}
+.lb button{position:absolute;top:14px;right:14px;min-width:48px;min-height:48px;border-radius:14px;border:0;background:var(--gold);font-size:22px;cursor:pointer}
+/* fx mode (motion on) */
+.talk .all{display:block}html:not(.fx) #say,html:not(.fx) .talk .next,html:not(.fx) #talkCount{display:none}
+.fx .talk .all{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
+
+.pal.pop i{animation:pop .5s}@keyframes pop{40%{transform:scale(1.35)}}
+@media(prefers-reduced-motion:reduce){html{scroll-behavior:auto}.float,.press,.dlg .next,.aura,.atkhint{animation:none}#dkHit.hit,.dsvg.hurt,.slash{animation:none}}
+
+/* sticky scenes (motion on) */
+.dayphone{display:none}
+.fx .scene{height:calc(var(--len)*1vh);position:relative}
+.fx .stage{position:sticky;top:0;height:100vh;display:flex;flex-direction:column;justify-content:center;padding-top:20px;padding-bottom:20px;overflow:hidden}
+html:not(.fx) .scrollhint{display:none}
+.talk{display:flex;flex-direction:column;gap:18px;padding-top:40px;padding-bottom:80px;max-width:760px}
+.fx .talk{padding-top:70px;padding-bottom:20px}
+.fairy{display:block;margin:0 auto;height:min(300px,calc(100vh - 400px));min-height:150px;max-width:100%;aspect-ratio:148/132;flex:none;overflow:visible}
+.fbob{animation:fbob 1.6s ease-in-out infinite alternate}@keyframes fbob{from{transform:translateY(4px)}to{transform:translateY(-8px)}}
+.ftwk{animation:ftwk 1.2s ease-in-out infinite alternate}@keyframes ftwk{from{opacity:1}to{opacity:.3}}
+.fglow{transform-box:fill-box;transform-origin:center;animation:fglow 2.4s ease-in-out infinite alternate}@keyframes fglow{from{opacity:.6;transform:scale(.92)}to{opacity:1;transform:scale(1.06)}}
+html:not(.fx) .fairy{display:none}
+@media(prefers-reduced-motion:reduce){.fbob,.ftwk,.fglow{animation:none}}
+.dots{display:flex;gap:10px;justify-content:center}.dots i{width:10px;height:10px;border-radius:3px;background:#2E5E50;transform:rotate(45deg);transition:background .3s}.dots i.on{background:var(--gold)}
+.minihd{display:flex;align-items:center;gap:12px;margin-bottom:10px}
+.daygrid{display:grid;grid-template-columns:minmax(0,1fr);gap:24px}
+@media(min-width:861px){.fx .daygrid{grid-template-columns:minmax(0,1fr) auto;gap:48px;align-items:center}.fx .dayphone{display:block}.fx .phone{height:min(600px,calc(100vh - 170px));width:auto;max-width:none}.fx .step .simg{display:none}.fx .step{transition:opacity .3s,transform .3s,border-color .3s,background .3s;opacity:.5;padding:10px 16px}.fx .step p{display:none}.fx .step.on{opacity:1;border-color:var(--gold2);transform:translateX(6px);background:#FFFBEA;padding:14px 18px}.fx .step.on p{display:block}.fx .step.done .chk{background:var(--em2)}}
+@media(max-width:860px){.fx .daygrid{display:flex;flex-direction:column;align-items:center;gap:12px}.fx .dayphone{display:block;order:-1}.fx .phone{height:clamp(220px,calc(100vh - 380px),460px);width:auto;max-width:none;border-radius:22px;border-width:5px}.fx .steps{width:100%}.fx .step{display:none}.fx .step.on{display:block}.fx .step .simg{display:none}.fx .step.on .chk{background:var(--em2)}.fx .step p{font-size:14px}}
+.dtxt .lead{max-width:40em}
+.ranks{width:100%}
+@media(min-width:900px){.ranks{grid-template-columns:repeat(9,minmax(0,1fr))}.ranks li{font-size:14px;padding:12px 2px}}
+.fx .title h1 .ch{animation:drop .9s cubic-bezier(.3,1.6,.5,1) both;animation-delay:calc(var(--k)*70ms + 150ms)}
+@keyframes drop{0%{transform:translateY(-70px);opacity:0}60%{opacity:1}}
+.fx .lvup{opacity:0;transform:scale(0)}.fx .lvup.show{animation:lv .6s cubic-bezier(.3,1.8,.5,1) forwards,bob 1s 0.6s ease-in-out infinite alternate}
+@keyframes lv{to{opacity:1;transform:scale(1)}}@keyframes bob{from{opacity:1;transform:translateY(0)}to{opacity:1;transform:translateY(-6px)}}
+.shake{animation:shake .38s}@keyframes shake{20%{transform:translateX(-10px)}40%{transform:translateX(8px)}60%{transform:translateX(-5px)}80%{transform:translateX(3px)}}
+.dmg.fly{animation:dmg .9s ease-out forwards}@keyframes dmg{0%{opacity:1;transform:translate(-50%,0) scale(1.6)}100%{opacity:0;transform:translate(-50%,-46px) scale(1)}}
+.plus.fly{animation:plus 1.2s ease-out}@keyframes plus{0%{opacity:1;transform:translateY(6px)}100%{opacity:0;transform:translateY(-22px)}}
+.go.flash{animation:goflash .8s ease-out}@keyframes goflash{0%{opacity:1;transform:scale(1.8)}100%{opacity:0;transform:scale(1)}}
+.pulse{animation:pulse .55s ease-out}@keyframes pulse{0%{transform:scale(1.1);box-shadow:0 0 0 0 rgba(70,224,165,.7)}100%{transform:scale(1);box-shadow:0 0 0 26px rgba(70,224,165,0)}}
+.chest .lid{transition:transform .5s cubic-bezier(.3,1.8,.5,1) .2s}.demon.fx-win .chest .lid{transform:rotate(-28deg)}
+.restored{animation:restore .5s cubic-bezier(.3,1.8,.5,1)}@keyframes restore{0%{transform:scale(.94)}}
+.reveal{transition:opacity .7s,transform .7s}.fx .reveal:not(.in){opacity:0;transform:translateY(28px)}
+#hpbar,#xpbar{transition:width .5s cubic-bezier(.2,.8,.3,1)}
+.stat .bar i{transition:width 1.3s cubic-bezier(.2,.8,.3,1)}
+.fx .stat:not(.in) .bar i{width:0}
+.fx .ruin .f{filter:grayscale(1) brightness(.92);opacity:.7}
+/* demon king art from the app (v1.79.0) */
+.anx { transform-box: view-box; transform-origin: 0px 0px; }
+.anx-p { opacity: 0; }
+.anx-batw { transform-box: fill-box; transform-origin: 50% 50%; }
+.anx-wisp { transform-box: fill-box; transform-origin: 50% 50%; }
+.live .anx-cape { animation: 1.6s ease-in-out 0s infinite alternate none running axCape; }
+.live .anx-rune { animation: 1.2s ease-in-out 0s infinite alternate none running axRune; }
+.live .anx-wisp { animation: 3s ease-out 0s infinite normal none running axWisp; }
+.live .anx-bat { animation: 1.1s ease-in-out 0s infinite alternate none running axBat; }
+.live .anx-batw { animation: 0.18s ease-in-out 0s infinite alternate none running axBatW; }
+@media (prefers-reduced-motion: reduce){.live .anx, .live .anx-p, .live .anx-rune, .live .anx-batw { animation: auto ease 0s 1 normal none running none; }}
+.an-flag, .an-breathe { transform-box: fill-box; }
+.live .an-flag { transform-origin: 0px 50%; animation: 1.1s ease-in-out 0s infinite alternate none running anFlag; }
+.live .an-bolt { animation: 3.8s linear 0s infinite normal none running anBolt; }
+.live .an-flash { animation: 3.8s linear 0s infinite normal none running anFlash; }
+.an-flash { opacity: 0; }
+.live .an-bolt polyline { --b2: inline; }
+.live .an-breathe { transform-origin: 50% 100%; animation: 2.6s ease-in-out 0s infinite alternate none running anBreathe; }
+@media (prefers-reduced-motion: reduce){.live .an-flag, .live .an-bolt, .live .an-flash, .live .an-breathe { animation: auto ease 0s 1 normal none running none; }}
+@keyframes axCape { 
+  0% { transform: skewX(0deg) scaleX(1); }
+  100% { transform: skewX(-9deg) scaleX(1.07); }
+}
+@keyframes axRune { 
+  0% { opacity: 0.45; }
+  100% { opacity: 1; }
+}
+@keyframes axWisp { 
+  0% { opacity: 0; transform: translate(0px, 0px) scale(0.6); }
+  20% { opacity: 0.85; }
+  100% { opacity: 0; transform: translate(0px, -42px) scale(1.2); }
+}
+@keyframes axBat { 
+  0% { transform: translateY(0px); }
+  100% { transform: translate(3px, -5px); }
+}
+@keyframes axBatW { 
+  0% { transform: scaleX(1); }
+  100% { transform: scaleX(0.5); }
+}
+@keyframes anFlag { 
+  0% { transform: skewY(7deg) scaleX(1); }
+  100% { transform: skewY(-7deg) scaleX(0.8); }
+}
+@keyframes anBolt { 
+  0%, 70% { opacity: 0; }
+  72% { opacity: 1; }
+  75% { opacity: 0.2; }
+  78% { opacity: 1; }
+  88%, 100% { opacity: 0; }
+}
+@keyframes anFlash { 
+  0%, 70%, 100% { opacity: 0; }
+  72%, 78% { opacity: 0.35; }
+  75% { opacity: 0.05; }
+  86% { opacity: 0; }
+}
+@keyframes anBreathe { 
+  0% { transform: scale(1, 1); }
+  100% { transform: scale(1.025, 1.045); }
+}
+</style>
+</head>
+<body>
+<header class="hd" id="hd">
+<div class="wrap">
+<span style="display:flex;align-items:center;gap:8px"><a class="studio" href="../index.html" aria-label="나이트 멜로디 스튜디오 홈" data-ia="studioHome"><img src="../assets/logo/symbol.svg" alt="" width="32" height="32"></a><a class="logo" href="#top" data-i="logo">몸짱용사</a></span>
+<nav style="display:flex;align-items:center;gap:6px" aria-label="Language">
+<button type="button" class="lang" data-set="ko" aria-pressed="true">KO</button>
+<button type="button" class="lang" data-set="en" aria-pressed="false">EN</button>
+<a class="btn gold hide-s" href="https://heiroku24.github.io/-/" style="margin-left:10px;min-height:44px;font-size:18px;padding:0 18px" data-i="play">플레이하기</a>
+</nav>
+</div>
+</header>
+
+<main>
+<section class="night" id="top">
+<canvas class="sky" aria-hidden="true"></canvas>
+<div class="wrap title">
+<div class="row" style="width:100%">
+<div class="txt">
+<p style="margin:0 0 12px;font-weight:700;color:var(--em)" data-i="eyebrow">운동이 퀘스트가 되는 홈트레이닝 RPG</p>
+<h1 id="t1" data-i="title">몸짱용사</h1>
+<p class="pill" data-i="sub">몸짱왕국 대모험</p>
+<p style="margin:0 0 26px;font-size:18px;max-width:30em;color:#D3E8E0" data-i="heroLead">몸짱용사가 되어 마왕을 토벌하는 홈트레이닝 퀘스트. 매일 모험지의 보스를 물리치고, 일주일 동안 모은 경험치로 마왕성에 도전하세요.</p>
+<div style="display:flex;gap:18px;flex-wrap:wrap;align-items:center">
+<a class="btn gold" href="https://heiroku24.github.io/-/" data-i="cta1">지금 바로 모험 시작</a>
+<a class="press px" href="#talk">▶ PRESS START</a>
+</div>
+<p style="margin:18px 0 0;font-size:14px;color:#A3C4B8" data-i="heroNote">브라우저에서 열고 홈 화면에 추가하면 앱처럼 써요. 기구도, 헬스장도 필요 없어요.</p>
+</div>
+<button type="button" class="ph float" data-zoom aria-label="몸짱용사 시작 화면" data-ia="altSplash"><span class="rot" id="rot"><video class="on" muted loop playsinline preload="none" poster="img/splash-village.jpg" data-src="vid/splash-village.mp4" aria-hidden="true" style="border-color:#000"></video><video muted loop playsinline preload="none" poster="img/splash-wed.jpg" data-src="vid/splash-wed.mp4" aria-hidden="true" style="border-color:#000"></video><video muted loop playsinline preload="none" poster="img/splash-fri.jpg" data-src="vid/splash-fri.mp4" aria-hidden="true" style="border-color:#000"></video><video muted loop playsinline preload="none" poster="img/splash-sat.jpg" data-src="vid/splash-sat.mp4" aria-hidden="true" style="border-color:#000"></video><video muted loop playsinline preload="none" poster="img/splash-sun.jpg" data-src="vid/splash-sun.mp4" aria-hidden="true" style="border-color:#000"></video></span></button>
+</div>
+</div>
+
+<div class="scene" id="talkScene" style="--len:280">
+<div class="stage wrap talk" id="talk">
+<svg class="fairy" viewBox="-14 -6 148 132" aria-hidden="true" focusable="false"><defs><radialGradient id="fglow"><stop offset="0" stop-color="#FFF3B0" stop-opacity=".55"/><stop offset="1" stop-color="#FFF3B0" stop-opacity="0"/></radialGradient></defs><ellipse class="fglow" cx="60" cy="62" rx="66" ry="62" fill="url(#fglow)"/><g class="fbob"><g stroke="#2B2138" stroke-width="2.5" stroke-linejoin="round"><ellipse cx="33" cy="79" rx="17" ry="8.5" transform="rotate(30 33 79)" fill="#FFD0EC"></ellipse><ellipse cx="87" cy="79" rx="17" ry="8.5" transform="rotate(-30 87 79)" fill="#FFD0EC"></ellipse><ellipse cx="25" cy="47" rx="25" ry="13" transform="rotate(-42 25 47)" fill="#CDEBFF"></ellipse><ellipse cx="95" cy="47" rx="25" ry="13" transform="rotate(42 95 47)" fill="#CDEBFF"></ellipse></g><g fill="none" stroke="#9CCBEA" stroke-width="1.4" stroke-linecap="round"><path d="M14,58 Q22,46 32,36 M20,60 Q28,52 38,46 M106,58 Q98,46 88,36 M100,60 Q92,52 82,46"></path></g><ellipse cx="60" cy="86" rx="24" ry="26" fill="#FFF3B0" opacity=".45"></ellipse><ellipse cx="60" cy="47" rx="27" ry="26" fill="#7ADCB4" stroke="#2B2138" stroke-width="3"></ellipse><circle cx="60" cy="19" r="8" fill="#7ADCB4" stroke="#2B2138" stroke-width="3"></circle><polygon points="60.0,13.5 61.5,17.0 65.2,17.3 62.4,19.8 63.2,23.4 60.0,21.5 56.8,23.4 57.6,19.8 54.8,17.3 58.5,17.0" fill="#FFD95E" stroke="#2B2138" stroke-width="2" stroke-linejoin="round"></polygon><path d="M50,72 Q60,68 70,72 L80,98 Q60,108 40,98 Z" fill="#FF9FC4" stroke="#2B2138" stroke-width="3" stroke-linejoin="round"></path><path d="M44,95 Q60,103 76,95" fill="none" stroke="#fff" stroke-width="2.2" stroke-linecap="round" opacity=".7"></path><rect x="51" y="75" width="18" height="5" rx="2.5" fill="#FFD95E" stroke="#2B2138" stroke-width="2"></rect><line x1="54" y1="101" x2="53" y2="111" stroke="#2B2138" stroke-width="11" stroke-linecap="round"></line><line x1="54" y1="101" x2="53" y2="111" stroke="#FFD9B8" stroke-width="5" stroke-linecap="round"></line><line x1="66" y1="101" x2="67" y2="111" stroke="#2B2138" stroke-width="11" stroke-linecap="round"></line><line x1="66" y1="101" x2="67" y2="111" stroke="#FFD9B8" stroke-width="5" stroke-linecap="round"></line><ellipse cx="51" cy="113" rx="5.5" ry="3.2" fill="#FFD95E" stroke="#2B2138" stroke-width="2.2"></ellipse><ellipse cx="69" cy="113" rx="5.5" ry="3.2" fill="#FFD95E" stroke="#2B2138" stroke-width="2.2"></ellipse><line x1="51" y1="78" x2="38" y2="88" stroke="#2B2138" stroke-width="11" stroke-linecap="round"></line><line x1="51" y1="78" x2="38" y2="88" stroke="#FFD9B8" stroke-width="5" stroke-linecap="round"></line><line x1="86" y1="64" x2="98" y2="42" stroke="#2B2138" stroke-width="5" stroke-linecap="round"></line><line x1="86" y1="64" x2="98" y2="42" stroke="#FFE9A8" stroke-width="2.4" stroke-linecap="round"></line><line x1="69" y1="78" x2="86" y2="66" stroke="#2B2138" stroke-width="11" stroke-linecap="round"></line><line x1="69" y1="78" x2="86" y2="66" stroke="#FFD9B8" stroke-width="5" stroke-linecap="round"></line><polygon points="99.0,29.0 101.4,34.7 107.6,35.2 102.9,39.3 104.3,45.3 99.0,42.0 93.7,45.3 95.1,39.3 90.4,35.2 96.6,34.7" fill="#FFD95E" stroke="#2B2138" stroke-width="2" stroke-linejoin="round"></polygon><path d="M35,49 L23,42 L36,60 Z" fill="#FFD9B8" stroke="#2B2138" stroke-width="3" stroke-linejoin="round"></path><path d="M85,49 L97,42 L84,60 Z" fill="#FFD9B8" stroke="#2B2138" stroke-width="3" stroke-linejoin="round"></path><circle cx="60" cy="51" r="21" fill="#FFD9B8" stroke="#2B2138" stroke-width="3"></circle><path d="M38,48 Q40,28 60,28 Q80,28 82,48 Q73,40 67,42 Q61,35 55,42 Q47,40 38,48 Z" fill="#7ADCB4" stroke="#2B2138" stroke-width="3" stroke-linejoin="round"></path><ellipse cx="51" cy="54" rx="3.8" ry="5" fill="#2B2138"></ellipse><ellipse cx="69" cy="54" rx="3.8" ry="5" fill="#2B2138"></ellipse><circle cx="52.3" cy="52" r="1.5" fill="#fff"></circle><circle cx="70.3" cy="52" r="1.5" fill="#fff"></circle><circle cx="50.4" cy="56" r=".8" fill="#fff"></circle><circle cx="68.4" cy="56" r=".8" fill="#fff"></circle><ellipse cx="44" cy="61" rx="4.6" ry="2.7" fill="#FF8FA8" opacity=".75"></ellipse><ellipse cx="76" cy="61" rx="4.6" ry="2.7" fill="#FF8FA8" opacity=".75"></ellipse><path d="M54.5,62 Q60,68 65.5,62 Q60,64.5 54.5,62 Z" fill="#FF7A93" stroke="#2B2138" stroke-width="2" stroke-linejoin="round" stroke-linecap="round"></path><g class="ftwk"><path d="M14,90 L15.8,94.2 L20,96 L15.8,97.8 L14,102 L12.2,97.8 L8,96 L12.2,94.2 Z" fill="#FFE27A"></path><path d="M108,91 L109.5,94.5 L113,96 L109.5,97.5 L108,101 L106.5,97.5 L103,96 L106.5,94.5 Z" fill="#FFFFFF"></path><path d="M14,18 L15.2,20.8 L18,22 L15.2,23.2 L14,26 L12.8,23.2 L10,22 L12.8,20.8 Z" fill="#FFFFFF"></path><path d="M112,62.5 L113.05,64.95 L115.5,66 L113.05,67.05 L112,69.5 L110.95,67.05 L108.5,66 L110.95,64.95 Z" fill="#FFE27A"></path></g></g></svg>
+<div class="dlg">
+<img class="face" src="img/bandi-face.jpg" alt="" aria-hidden="true">
+<div>
+<span class="who" data-i="bandi">요정 반디</span>
+<p class="say" id="say" aria-hidden="true"></p>
+<ol class="all" id="allLines" style="margin:0;padding-left:1.2em;font-size:18px;line-height:1.7"></ol>
+</div>
+<span class="next px" aria-hidden="true">▼</span>
+</div>
+<div class="dots scrollhint" id="talkDots" aria-hidden="true"><i></i><i></i><i></i></div>
+<p class="px scrollhint" style="margin:0;color:#A3C4B8;font-size:10px;text-align:center" aria-hidden="true">SCROLL ▼</p>
+</div>
+</div>
+</section>
+
+<section class="band" id="stats">
+<div class="wrap row">
+<div class="txt">
+<span class="tag" style="background:#FFF3C9;color:#8A5A00" data-i="statsTag">모험 정보</span>
+<h2 class="h2" data-i="statsH">한 주가 하나의 모험이 되는<br>홈트레이닝 RPG</h2>
+<p class="lead" data-i="statsLead">기구 없이, 점프 없이, 매트 한 장 깔 공간이면 돼요. 운동할 부위가 오늘의 모험지가 되고, 땀 흘린 만큼 용사와 왕국이 함께 자라요.</p>
+</div>
+<div class="stat" style="flex:1 1 380px">
+<h3 class="px">STATUS</h3>
+<div class="srow"><span data-i="s1">모험지</span><span class="bar"><i></i></span><b class="px" data-n="8">8</b></div>
+<div class="srow"><span data-i="s2">보스와 마왕</span><span class="bar"><i></i></span><b class="px" data-n="7">7</b></div>
+<div class="srow"><span data-i="s3">길드 랭크</span><span class="bar"><i></i></span><b class="px" data-n="9">9</b></div>
+<div class="srow"><span data-i="s4">장비</span><span class="bar"><i></i></span><b class="px" data-n="120">120</b></div>
+<div class="srow"><span data-i="s5">동료</span><span class="bar"><i></i></span><b class="px" data-n="3">3</b></div>
+<span class="lvup px" id="lvup">LEVEL UP!</span>
+</div>
+</div>
+</section>
+
+<section class="day" id="day">
+<div class="wrap" style="padding-top:clamp(64px,9vw,110px)">
+<span class="tag" style="background:#DDF6EC;color:#0F6B50">QUEST LOG</span>
+<h2 class="h2" data-i="dayH">용사의 일주일</h2>
+<p class="lead" data-i="dayLead">스크롤을 내리면 한 주의 모험이 진행돼요. 퀘스트를 깰 때마다 주간 XP가 차올라요.</p>
+</div>
+<div class="scene" id="dayScene" style="--len:560">
+<div class="stage wrap" id="dayPin">
+<div class="minihd scrollhint"><span class="px" style="font-size:10px;color:#0F6B50">QUEST LOG</span><b class="dh" style="font-size:22px" data-i="dayH2">용사의 일주일</b><span class="px" id="stepNo" style="font-size:10px;color:var(--mute);margin-left:auto">1/7</span></div>
+<div class="xp"><span class="px" style="font-size:11px">XP</span><span class="bar"><i id="xpbar"></i></span><b class="px" id="xpnum">1000 / 1000</b></div>
+<div class="daygrid">
+<ol class="steps" id="steps">
+<li class="step"><h3><span class="chk">✓</span><span data-i="d0h">반디의 길 추천</span></h3><p data-i="d0p">몇 가지 질문에 답하면 요정 반디가 새싹의 길, 모험의 길, 몸짱의 길 중 무리하지 않는 길을 골라 줘요. 요일이 정해진 고정형과 그날 고르는 선택형 일정도&nbsp;있어요.</p><button type="button" class="ph simg" data-zoom><img src="img/bandi.jpg" alt="반디가 길을 추천하는 화면" data-ia="a0" loading="lazy"></button></li>
+<li class="step"><h3><span class="chk">✓</span><span data-i="d1h">모험 지도</span></h3><p data-i="d1p">한 주는 7개의 스테이지예요. 오늘 운동할 부위가 오늘의 모험지이고, 상체 촌락의 오우거부터 들바람 초원의 멧돼지까지 보스가 기다려요. 지도에는 지금 시간대와 날씨가 비쳐요.</p><button type="button" class="ph simg" data-zoom><img src="img/map.jpg" alt="모험 지도 화면" data-ia="a1" loading="lazy"></button><span class="plus px">+200 XP</span></li>
+<li class="step"><h3><span class="chk">✓</span><span data-i="d2h">일일 퀘스트</span></h3><p data-i="d2p">동작마다 그림, 자세 팁, 영상이 붙어 있고 타이머와 60초 휴식이 자동이에요. 러닝·걷기, 비 오는 날의 실내 유산소, 물 2L 같은 사이드 퀘스트도 함께해요.</p><button type="button" class="ph simg" data-zoom><img src="img/quest.jpg" alt="일일 퀘스트 화면" data-ia="a2" loading="lazy"></button><span class="plus px">+200 XP</span></li>
+<li class="step"><h3><span class="chk">✓</span><span data-i="d3h">피버모드</span></h3><p data-i="d3p">버튼 하나로 오늘의 퀘스트가 서킷이 돼요. 3·2·1·GO! 박자에 맞춰 따라 하면 세트가 끝날 때마다 자동으로 체크돼요.</p><button type="button" class="ph simg" data-zoom><img src="img/fever.jpg" alt="피버모드 화면" data-ia="a3" loading="lazy"></button><span class="plus px">+200 XP</span></li>
+<li class="step"><h3><span class="chk">✓</span><span data-i="d5h">왕국 재건</span></h3><p data-i="d5p">퀘스트와 토벌로 얻은 건축 자재로 성벽, 여관, 길드, 훈련장, 대장간, 교역소를 되살려요. 훈련장의 자유 훈련으로 XP를 더 채울 수도&nbsp;있어요.</p><button type="button" class="ph simg" data-zoom><img src="img/kingdom.jpg" alt="몸짱왕국 화면" data-ia="a5" loading="lazy"></button><span class="plus px">+150 XP</span></li>
+<li class="step"><h3><span class="chk">✓</span><span data-i="d6h">러닝 여정</span></h3><p data-i="d6p">퀘스트에 적은 러닝 거리가 쌓일수록 여정이 이어지고, 길 위에서 동료를 만나요.</p><button type="button" class="ph simg" data-zoom><img src="img/run.jpg" alt="러닝 화면" data-ia="a6" loading="lazy"></button><span class="plus px">+150 XP</span></li>
+<li class="step"><h3><span class="chk">✓</span><span data-i="d4h">마왕전</span></h3><p data-i="d4p">한 주에 1000 XP를 모으면 봉인된 마왕성 문이 열려요. 러닝을 마친 뒤 전신 서킷으로 몸짱 마왕에게 도전해요.</p><button type="button" class="ph simg" data-zoom><img src="img/demon.jpg" alt="마왕전 화면" data-ia="a4" loading="lazy"></button><span class="plus px">OPEN!</span></li>
+</ol>
+<div class="dayphone"><div class="phone" id="phone"><video class="on" muted loop playsinline preload="none" poster="img/bandi.jpg" data-src="vid/bandi.mp4" aria-hidden="true"></video><video muted loop playsinline preload="none" poster="img/map.jpg" data-src="vid/map.mp4" aria-hidden="true"></video><video muted loop playsinline preload="none" poster="img/quest.jpg" data-src="vid/quest.mp4" aria-hidden="true"></video><video muted loop playsinline preload="none" poster="img/fever.jpg" data-src="vid/fever.mp4" aria-hidden="true"></video><video muted loop playsinline preload="none" poster="img/kingdom.jpg" data-src="vid/kingdom.mp4" aria-hidden="true"></video><video muted loop playsinline preload="none" poster="img/run.jpg" data-src="vid/run.mp4" aria-hidden="true"></video><video muted loop playsinline preload="none" poster="img/demon.jpg" data-src="vid/demon.mp4" aria-hidden="true"></video></div></div>
+</div>
+</div>
+</div>
+<div style="height:clamp(48px,7vw,90px)"></div>
+</section>
+
+<section class="band fever" id="fever">
+<div class="wrap row rev">
+<div class="txt">
+<span class="tag" style="background:var(--gold);color:#2B2000">FEVER MODE</span>
+<h2 class="h2" style="color:var(--gold)" data-i="fH">피버모드,<br>용사가 박자를 세어 줘요</h2>
+<div class="hud">
+<div class="ring" id="ring"><b class="px" id="rep">15/15</b></div>
+<div style="display:flex;flex-direction:column;gap:12px"><span class="go px" id="go">GO!</span><div class="spd px" id="spd"><span>0.5x</span><span class="on">1.0x</span><span>1.5x</span></div></div>
+</div>
+<ul class="list">
+<li><span class="dot"></span><span data-i="f1">3·2·1·GO! 신호와 박자 소리에 맞춰 한 동작씩 진행해요.</span></li>
+<li><span class="dot"></span><span data-i="f2">속도는 0.5배에서 1.5배까지. 박자만 바뀌고 운동 시간은 그대로예요.</span></li>
+<li><span class="dot"></span><span data-i="f3">옆에서 용사가 응원하고, 위에서는 보스 체력이 줄어들어요.</span></li>
+<li><span class="dot"></span><span data-i="f4">잠깐 멈췄다 이어서 할 수 있고, 중간에 닫아도 마친 세트는 남아요.</span></li>
+</ul>
+</div>
+<button type="button" class="ph float" data-zoom><video muted loop playsinline preload="none" poster="img/fever.jpg" data-src="vid/fever.mp4" aria-label="피버모드에서 용사가 횟수를 세며 응원하는 화면" data-ia="altFever" style="border-color:#000"></video></button>
+</div>
+</section>
+
+<section class="demon band" id="demon">
+<div class="wrap dgrid">
+<div class="dtxt">
+<span class="tag" style="background:#B58CFF;color:#1A0F33" data-i="dTag">마왕전</span>
+<h2 class="h2" data-i="dH">일주일의 땀으로<br>마왕성의 문을 열어요</h2>
+<p class="lead" style="color:#D9CFEA" data-i="dLead">한 주에 1000 XP를 모으면 봉인된 마왕성 문이 열려요. 러닝을 마친 뒤 전신 서킷을 피버모드로 끝까지 채우면 몸짱 마왕을 물리쳐요.</p>
+<div class="mini">
+<div><strong class="px" style="font-size:16px">+150 XP</strong><p data-i="m1">승리 보너스와 장비가 든 전리품&nbsp;상자</p></div>
+<div><strong data-i="m2h">연습전</strong><p data-i="m2">첫 주는 XP가 모자라도 도전해 볼 수&nbsp;있어요</p></div>
+<div><strong data-i="m3h">재도전</strong><p data-i="m3">다 못 끝내도 그 주 안에 다시&nbsp;도전해요</p></div>
+</div>
+</div>
+<div class="bosswrap">
+<p class="px atkhint" style="margin:0 0 12px;color:#B58CFF;font-size:10px;text-align:center"><span class="hint-mouse">CLICK TO ATTACK!</span><span class="hint-touch">TAP TO ATTACK!</span></p>
+<div class="boss" id="boss">
+<button type="button" class="hitbtn" id="hitbtn" aria-label="마왕 공격하기" data-ia="atkBtn">
+<span class="aura" aria-hidden="true"></span>
+<svg class="qimg live dsvg" aria-hidden="true" focusable="false" viewBox="0 0 300 132"><rect y="122" width="300" height="10" fill="#3A2A5E"></rect><g transform="translate(92,93.44) scale(0.68)"><defs><radialGradient id="dcAurax3" cx=".5" cy=".55" r=".5"><stop offset="0" stop-color="#9A6BE0" stop-opacity=".45"></stop><stop offset="1" stop-color="#9A6BE0" stop-opacity="0"></stop></radialGradient></defs><ellipse cx="0" cy="-30" rx="86" ry="84" fill="url(#dcAurax3)"></ellipse><ellipse cx="0" cy="40" rx="70" ry="7" fill="#000" opacity=".18"></ellipse><ellipse cx="-30" cy="38" rx="46" ry="8" fill="#8C6FB8" opacity=".28"></ellipse><ellipse cx="34" cy="37" rx="42" ry="7" fill="#8C6FB8" opacity=".24"></ellipse><g stroke="#2B2138" stroke-width="3" stroke-linejoin="round"><path d="M-68,40 L-63,-30 L-40,-27 L-42,40 Z" fill="#2E2442"></path><path d="M-69,-30 L-58,-62 L-53,-54 L-48,-68 L-36,-26 Z" fill="#1E1630"></path><path d="M40,40 L42,-38 L66,-35 L64,40 Z" fill="#2E2442"></path><path d="M37,-38 Q50,-64 61,-96 Q59,-64 70,-34 Z" fill="#1E1630"></path><path d="M-42,40 V-4 L-36,-12 L-30,-4 L-24,-12 L-18,-4 L18,-4 L24,-12 L30,-4 L36,-12 L42,-4 V40 Z" fill="#3A2E52"></path><rect x="-22" y="-58" width="44" height="98" fill="#3A2E52"></rect><path d="M-30,-58 L-24,-74 L-14,-64 L0,-114 L14,-64 L24,-74 L30,-58 Z" fill="#1E1630"></path><path d="M-14,-50 L-9,-42 L-13,-34 M12,-22 L8,-14 L13,-8 M-60,0 L-55,8 L-58,16 M52,-10 L56,-2 L52,6" fill="none" stroke-width="1.8" opacity=".85"></path><circle cx="0" cy="-36" r="8.5" fill="#B88CFF"></circle><circle cx="0" cy="-36" r="3.5" fill="#EBDDFF" stroke="none"></circle><path d="M0,-44.5 V-27.5 M-8.5,-36 H8.5" stroke-width="1.8"></path><path d="M-57.5,-2 V-12 L-54,-18 L-50.5,-12 V-2 Z" fill="#B88CFF" stroke-width="2"></path><path d="M49.5,-6 V-16 L53,-22 L56.5,-16 V-6 Z" fill="#B88CFF" stroke-width="2"></path><path d="M-13.5,4 V-6 L-10,-12 L-6.5,-6 V4 Z" fill="#B88CFF" stroke-width="2"></path><path d="M6.5,4 V-6 L10,-12 L13.5,-6 V4 Z" fill="#B88CFF" stroke-width="2"></path><path d="M-16,40 V12 Q0,-8 16,12 V40 Z" fill="#120C1C"></path><path d="M-11,40 V16 Q0,2 11,16 V40 Z" fill="#6B44B8" opacity=".55" stroke="none"></path><path d="M-8,40 V9 M0,40 V3 M8,40 V9 M-14,22 H14" stroke-width="2.2" fill="none"></path><path d="M-10,34 L-8,40 L-6,34 M-2,34 L0,40 L2,34 M6,34 L8,40 L10,34" stroke-width="1.8" fill="none"></path><line x1="0" y1="-114" x2="0" y2="-130"></line><g class="an-flag"><path d="M0,-130 L22,-126 L15,-122 L22,-117 L12,-116 L0,-114 Z" fill="#7A1F2E"></path></g></g><g transform="translate(-30,-92)"><g class="anx anx-bat" style="animation-delay:-0.40s"><g class="anx anx-batw"><path transform="scale(1)" d="M0,0 Q-5,-6 -12,-4 Q-8,-1 -9,3 Q-5,0 -2,3 L0,1 L2,3 Q5,0 9,3 Q8,-1 12,-4 Q5,-6 0,0 Z" fill="#2B2138"></path></g></g></g><g transform="translate(34,-108)"><g class="anx anx-bat" style="animation-delay:-1.20s"><g class="anx anx-batw"><path transform="scale(0.8)" d="M0,0 Q-5,-6 -12,-4 Q-8,-1 -9,3 Q-5,0 -2,3 L0,1 L2,3 Q5,0 9,3 Q8,-1 12,-4 Q5,-6 0,0 Z" fill="#2B2138"></path></g></g></g><g transform="translate(-46,-78)"><g class="anx anx-bat" style="animation-delay:-0.80s"><g class="anx anx-batw"><path transform="scale(0.7)" d="M0,0 Q-5,-6 -12,-4 Q-8,-1 -9,3 Q-5,0 -2,3 L0,1 L2,3 Q5,0 9,3 Q8,-1 12,-4 Q5,-6 0,0 Z" fill="#2B2138"></path></g></g></g><ellipse cx="-4" cy="41" rx="60" ry="5" fill="#B49AD8" opacity=".3"></ellipse><ellipse class="an-flash" cx="0" cy="-30" rx="80" ry="80" fill="#FFF3B0"></ellipse><g class="an-bolt"><polyline points="-46,-92 -38,-78 -46,-76 -36,-58" fill="none" stroke="#FFD95E" stroke-width="4" stroke-linecap="round" stroke-linejoin="round"></polyline><polyline points="50,-104 44,-90 51,-88 42,-70" fill="none" stroke="#FFD95E" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" style="display:var(--b2,none)"></polyline></g></g><g transform="translate(216,89.80000000000001) scale(0.7)"><g id="dkHit"><g class="an-breathe"><path class="anx-p anx-wisp" style="animation-delay:0s" d="M-52,20 q-5,-8 0,-14 q5,6 0,14 Z" fill="#8A5BD6" stroke="#2a1160" stroke-width="1.4" opacity=".9"></path><path class="anx-p anx-wisp" style="animation-delay:-1.3s" d="M50,10 q-5,-8 0,-14 q5,6 0,14 Z" fill="#8A5BD6" stroke="#2a1160" stroke-width="1.4" opacity=".9"></path><path class="anx-p anx-wisp" style="animation-delay:-2.1s" d="M-30,40 q-5,-8 0,-14 q5,6 0,14 Z" fill="#8A5BD6" stroke="#2a1160" stroke-width="1.4" opacity=".9"></path><path class="anx-p anx-wisp" style="animation-delay:-0.7s" d="M34,42 q-5,-8 0,-14 q5,6 0,14 Z" fill="#8A5BD6" stroke="#2a1160" stroke-width="1.4" opacity=".9"></path><g transform="translate(0,-20)"><g class="anx anx-cape"><g transform="translate(0,20)"><path d="M-42,-20 Q-70,22 -48,52 L48,52 Q70,22 42,-20 Z" fill="#3B1F5C" stroke="#2B2138" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"></path></g></g></g><line x1="-12" y1="20" x2="-16" y2="38" stroke="#2B2138" stroke-width="23" stroke-linecap="round"></line><line x1="-12" y1="20" x2="-16" y2="38" stroke="#9A62C8" stroke-width="17" stroke-linecap="round"></line><line x1="12" y1="20" x2="16" y2="38" stroke="#2B2138" stroke-width="23" stroke-linecap="round"></line><line x1="12" y1="20" x2="16" y2="38" stroke="#9A62C8" stroke-width="17" stroke-linecap="round"></line><path d="M-29,38 h23 l-3,9 h-17 Z M6,38 h23 l-3,9 h-17 Z" fill="#2B2138" stroke="#2B2138" stroke-width="2.4" stroke-linejoin="round" stroke-linecap="round"></path><path d="M-31,-18 Q-35,4 -20,16 L20,16 Q35,4 31,-18 Q0,-29 -31,-18 Z" fill="#9A62C8" stroke="#2B2138" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"></path><path d="M-2,-8 Q-14,2 -26,-9 M2,-8 Q14,2 26,-9" stroke="#6C3F98" stroke-width="2.6" fill="none" stroke-linecap="round"></path><path d="M0,-3 V14 M-10,3 H10 M-9,8.5 H9" stroke="#6C3F98" stroke-width="2.4" fill="none" stroke-linecap="round"></path><path d="M-23,13 L23,13 L21,34 L0,27 L-21,34 Z" fill="#2B2138" stroke="#2B2138" stroke-width="3" stroke-linejoin="round" stroke-linecap="round"></path><rect x="-23" y="11" width="46" height="6" rx="3" fill="#F6C445" stroke="#2B2138" stroke-width="2.5"></rect><line x1="-30" y1="-10" x2="-38" y2="6" stroke="#2B2138" stroke-width="24" stroke-linecap="round"></line><line x1="-30" y1="-10" x2="-38" y2="6" stroke="#9A62C8" stroke-width="18" stroke-linecap="round"></line><line x1="-38" y1="6" x2="-42" y2="22" stroke="#2B2138" stroke-width="21" stroke-linecap="round"></line><line x1="-38" y1="6" x2="-42" y2="22" stroke="#9A62C8" stroke-width="15" stroke-linecap="round"></line><ellipse cx="-34.4" cy="-1.1999999999999993" rx="15.299999999999999" ry="11.16" transform="rotate(116.56505117707799 -34.4 -1.1999999999999993)" fill="#9A62C8" stroke="#2B2138" stroke-width="2.5"></ellipse><ellipse cx="-42" cy="22" rx="9.5" ry="9.5" fill="#9A62C8" stroke="#2B2138" stroke-width="2.5"></ellipse><line x1="30" y1="-10" x2="38" y2="6" stroke="#2B2138" stroke-width="24" stroke-linecap="round"></line><line x1="30" y1="-10" x2="38" y2="6" stroke="#9A62C8" stroke-width="18" stroke-linecap="round"></line><line x1="38" y1="6" x2="42" y2="22" stroke="#2B2138" stroke-width="21" stroke-linecap="round"></line><line x1="38" y1="6" x2="42" y2="22" stroke="#9A62C8" stroke-width="15" stroke-linecap="round"></line><ellipse cx="34.4" cy="-1.1999999999999993" rx="15.299999999999999" ry="11.16" transform="rotate(63.43494882292201 34.4 -1.1999999999999993)" fill="#9A62C8" stroke="#2B2138" stroke-width="2.5"></ellipse><ellipse cx="42" cy="22" rx="9.5" ry="9.5" fill="#9A62C8" stroke="#2B2138" stroke-width="2.5"></ellipse><ellipse cx="-33" cy="-15" rx="10" ry="10" fill="#3B1F5C" stroke="#2B2138" stroke-width="2.6"></ellipse><path d="M-38,-22 L-33,-34 L-28,-22 Z" fill="#F6C445" stroke="#2B2138" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"></path><ellipse cx="33" cy="-15" rx="10" ry="10" fill="#3B1F5C" stroke="#2B2138" stroke-width="2.6"></ellipse><path d="M28,-22 L33,-34 L38,-22 Z" fill="#F6C445" stroke="#2B2138" stroke-width="2.2" stroke-linejoin="round" stroke-linecap="round"></path><defs><linearGradient id="hornMx4" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7a7392"></stop><stop offset=".5" stop-color="#2f2a42"></stop><stop offset="1" stop-color="#15111f"></stop></linearGradient></defs><defs><clipPath id="hornClipx4"><path d="M-18,-55 C-36,-56 -44,-74 -34,-98 C-33,-82 -25,-70 -6,-63 Z"></path></clipPath><linearGradient id="hornGx4" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#FFF1B8"></stop><stop offset=".5" stop-color="#F6C445"></stop><stop offset="1" stop-color="#B07A12"></stop></linearGradient><filter id="hornGlowx4" x="-1" y="-1" width="3" height="3"><feGaussianBlur stdDeviation=".9" result="b"></feGaussianBlur><feMerge><feMergeNode in="b"></feMergeNode><feMergeNode in="SourceGraphic"></feMergeNode></feMerge></filter></defs><g transform="scale(1,1)"><path d="M-18,-55 C-36,-56 -44,-74 -34,-98 C-33,-82 -25,-70 -6,-63 Z" fill="url(#hornMx4)" stroke="#0c0818" stroke-width="3" stroke-linejoin="round"></path><g clip-path="url(#hornClipx4)"><path d="M-29.1,-73.9 L-25.7,-68.8 L-29.1,-63.7 L-32.5,-68.8 Z" class="anx-rune" fill="#B88CFF" stroke="#2a1160" stroke-width=".8" filter="url(#hornGlowx4)"></path><path d="M-32.2,-78.5 L-29.2,-74.0 L-32.2,-69.5 L-35.2,-74.0 Z" class="anx-rune" fill="#B88CFF" stroke="#2a1160" stroke-width=".8" filter="url(#hornGlowx4)"></path><path d="M-34.2,-84.0 L-31.8,-80.4 L-34.2,-76.8 L-36.6,-80.4 Z" class="anx-rune" fill="#B88CFF" stroke="#2a1160" stroke-width=".8" filter="url(#hornGlowx4)"></path></g><path d="M-33.7,-62.9 C-37.9,-72.8 -37.9,-84.4 -35.8,-93.1" transform="translate(2.5,0)" fill="none" stroke="#fff" stroke-opacity=".3" stroke-width="1.8" stroke-linecap="round"></path></g><g transform="scale(-1,1)"><path d="M-18,-55 C-36,-56 -44,-74 -34,-98 C-33,-82 -25,-70 -6,-63 Z" fill="url(#hornMx4)" stroke="#0c0818" stroke-width="3" stroke-linejoin="round"></path><g clip-path="url(#hornClipx4)"><path d="M-29.1,-73.9 L-25.7,-68.8 L-29.1,-63.7 L-32.5,-68.8 Z" class="anx-rune" fill="#B88CFF" stroke="#2a1160" stroke-width=".8" filter="url(#hornGlowx4)"></path><path d="M-32.2,-78.5 L-29.2,-74.0 L-32.2,-69.5 L-35.2,-74.0 Z" class="anx-rune" fill="#B88CFF" stroke="#2a1160" stroke-width=".8" filter="url(#hornGlowx4)"></path><path d="M-34.2,-84.0 L-31.8,-80.4 L-34.2,-76.8 L-36.6,-80.4 Z" class="anx-rune" fill="#B88CFF" stroke="#2a1160" stroke-width=".8" filter="url(#hornGlowx4)"></path></g><path d="M-33.7,-62.9 C-37.9,-72.8 -37.9,-84.4 -35.8,-93.1" transform="translate(2.5,0)" fill="none" stroke="#fff" stroke-opacity=".3" stroke-width="1.8" stroke-linecap="round"></path></g><ellipse cx="-24" cy="-46" rx="7" ry="9" fill="#9A62C8" stroke="#2B2138" stroke-width="2.6"></ellipse><ellipse cx="24" cy="-46" rx="7" ry="9" fill="#9A62C8" stroke="#2B2138" stroke-width="2.6"></ellipse><ellipse cx="0" cy="-46" rx="22" ry="21" fill="#9A62C8" stroke="#2B2138" stroke-width="3"></ellipse><path d="M13,-54 l7,7 M20,-54 l-7,7" stroke="#2B2138" stroke-width="2" stroke-linecap="round"></path><ellipse cx="-10" cy="-52" rx="6" ry="6" fill="#FFB3A3" stroke="#2B2138" stroke-width="2.2"></ellipse><ellipse cx="-8.6" cy="-51.5" rx="2.8" ry="2.8" fill="#2B2138" stroke="none" stroke-width="0"></ellipse><path d="M-18,-63 L-3,-58" stroke="#2B2138" stroke-width="3.2" stroke-linecap="round"></path><ellipse cx="10" cy="-52" rx="6" ry="6" fill="#FFB3A3" stroke="#2B2138" stroke-width="2.2"></ellipse><ellipse cx="8.6" cy="-51.5" rx="2.8" ry="2.8" fill="#2B2138" stroke="none" stroke-width="0"></ellipse><path d="M18,-63 L3,-58" stroke="#2B2138" stroke-width="3.2" stroke-linecap="round"></path><path d="M-6,-35 Q0,-28 6,-35" stroke="#2B2138" stroke-width="3" stroke-linecap="round" fill="none"></path><ellipse cx="-16" cy="-39" rx="4.5" ry="3" fill="#FF8FA3" opacity=".55"></ellipse><ellipse cx="16" cy="-39" rx="4.5" ry="3" fill="#FF8FA3" opacity=".55"></ellipse></g></g></g></svg>
+<span class="hflash" aria-hidden="true"></span>
+</button>
+<div class="hp"><span class="px">HP</span><span class="bar"><i id="hpbar" style="width:100%"></i></span><span class="px" id="hpnum" style="color:#fff">1000</span></div>
+<div class="win" id="win">
+<span class="px">VICTORY!</span>
+<div class="chest" id="chest"><div class="lid"></div><div class="lock"></div><div class="base"></div></div>
+<span style="font-weight:700" data-i="winTxt">+150 XP · 전리품 상자를 얻었다!</span>
+</div>
+</div>
+<p class="againrow"><button type="button" class="btn gold again" id="again" data-i="again">다시 도전</button></p>
+<p class="sr" id="hpLive" aria-live="polite"></p>
+</div>
+</div>
+</section>
+
+<section class="band loot" id="loot">
+<div class="wrap">
+<span class="tag" style="background:#FFF3C9;color:#8A5A00" data-i="lTag">전리품</span>
+<h2 class="h2" data-i="lH">보스를 쓰러뜨리면<br>전리품이 쏟아져요</h2>
+<p class="lead" style="color:#C6D8D3"><span data-i="lLead">보스에게서 얻은 재료는 대장간에서 장비가 되고, 승급하면 랭크 세트가 주어져요.</span> <span class="hint-mouse" data-i="lHintM">마우스로 잡아서 던져 보세요.</span><span class="hint-touch" data-i="lHintT">눌러서 튕겨 보세요.</span></p>
+<div class="legend"><span><b style="color:#DDE8E5">◆</b> <span data-i="r1">일반</span></span><span><b style="color:#6FA8FF">◆</b> <span data-i="r2">희귀</span></span><span><b style="color:var(--gold)">◆</b> <span data-i="r3">전설</span></span></div>
+<div class="lootbox" id="lootbox">
+<ul class="items" id="items">
+<li class="it" data-i="i1">상체 촌락</li><li class="it r" data-i="i2">상체짱 오우거</li><li class="it" data-i="i3">하체의 숲</li><li class="it r" data-i="i4">하체짱 왕거미</li>
+<li class="it" data-i="i5">등어깨 협곡</li><li class="it r" data-i="i6">어깨짱 워울프</li><li class="it" data-i="i7">코어 유적</li><li class="it r" data-i="i8">코어짱 골렘</li>
+<li class="it" data-i="i9">허벅지 던전</li><li class="it r" data-i="i10">벅지짱 미노타우르스</li><li class="it" data-i="i11">들바람 초원</li><li class="it r" data-i="i12">심폐짱 멧돼지</li>
+<li class="it" data-i="i13">구름 온천</li><li class="it" data-i="i14">회복의 신전</li><li class="it l" data-i="i15">몸짱 마왕</li><li class="it l" data-i="i16">전리품 상자</li>
+<li class="it" data-i="i17">건축 자재</li><li class="it r" data-i="i18">랭크 망토</li><li class="it r" data-i="i19">랭크 깃털</li><li class="it r" data-i="i20">랭크 장화</li>
+<li class="it r" data-i="i21">랭크 허리띠</li><li class="it l" data-i="i22">전설 장비</li>
+</ul>
+</div>
+</div>
+</section>
+
+<section class="guild" id="guild">
+<div class="wrap" style="padding-top:clamp(64px,9vw,110px)">
+<span class="tag" style="background:#FFF3C9;color:#8A5A00" data-i="gTag">모험가 길드</span>
+<h2 class="h2" data-i="gH">카퍼부터 아다만타이트까지,<br>길드 랭크를 올려요</h2>
+<p class="lead" data-i="gLead">꾸준히 쌓은 기록으로 조건을 채우면 길드 접수원 세라에게 승급 시험을 볼 수 있어요. 승급할 때마다 망토, 깃털, 장화, 허리띠로 된 랭크 세트를 받고, 새 건물과 새 동작이 열려요.</p>
+</div>
+<div class="scene" id="guildScene" style="--len:300">
+<div class="stage wrap" style="align-items:center;gap:20px">
+<p class="px scrollhint" style="margin:0;color:#8A5A00;font-size:10px" data-i="promo">SCROLL TO RANK UP ▼</p>
+<div class="medal" id="medal"><span class="rays" aria-hidden="true"></span><div class="bimg cur" aria-hidden="true"></div><div class="bimg nxt" aria-hidden="true"></div></div>
+<p class="rkline"><b class="dh" id="rkname">카퍼</b><span class="px" id="rkno">RANK 1/9</span></p>
+<ol class="ranks" id="ranks"></ol>
+</div>
+</div>
+<div class="wrap" style="padding-bottom:clamp(56px,8vw,96px)">
+<p style="margin:0;font-size:15px;color:var(--mute)" data-i="gNote">최고 등급 아다만타이트는 마왕전에서 지면 내려가는 자리라, 지키는 것도 실력이에요. 배지 속 레벨은 매주 마왕을 물리쳤을 때의 예시&nbsp;레벨이에요.</p>
+</div>
+</section>
+
+<section class="band" id="kingdom">
+<div class="wrap row rev">
+<div class="txt">
+<span class="tag" style="background:#DDF6EC;color:#0F6B50" data-i="kTag">몸짱왕국 재건</span>
+<h2 class="h2" data-i="kH">운동한 만큼<br>무너진 왕국이 살아나요</h2>
+<p class="lead" data-i="kLead">퀘스트와 보스 토벌로 얻은 건축 자재로 폐허가 된 건물을 하나씩 복구해요. 카드를 눌러 누가 사는지 확인해 보세요.</p>
+<div class="bld" id="bld">
+<button type="button" class="flip" aria-pressed="false"><span class="f"><svg viewBox="0 0 44 44" aria-hidden="true"><path d="M4 40V14h6v-6h6v6h6v-6h6v6h6v-6h6v32Z" fill="#E2EEEA" stroke="#10231F" stroke-width="3" stroke-linejoin="round"/><path d="M4 26h36M16 14v26M28 14v26" stroke="#10231F" stroke-width="2"/></svg><b data-i="b1">성벽</b><span class="st px">RESTORED</span></span><span class="b"><video muted loop playsinline preload="none" poster="img/in-wall.jpg" data-src="vid/in-wall.mp4" aria-hidden="true"></video><span class="cap"><strong data-i="b1n">왕국의 울타리</strong><p data-i="b1p">이어질수록 왕국을 감싸요. 완성하면 성벽 위 풍경이&nbsp;열려요.</p></span></span></button>
+<button type="button" class="flip" aria-pressed="false"><span class="f"><svg viewBox="0 0 44 44" aria-hidden="true"><path d="M6 40V20L22 6l16 14v20Z" fill="#FFE9A8" stroke="#10231F" stroke-width="3" stroke-linejoin="round"/><path d="M17 40V28h10v12" fill="#C57A4A" stroke="#10231F" stroke-width="3"/></svg><b data-i="b2">여관</b><span class="st px">RESTORED</span></span><span class="b"><video muted loop playsinline preload="none" poster="img/in-inn.jpg" data-src="vid/in-inn.mp4" aria-hidden="true"></video><span class="cap"><strong data-i="b2n">여주인과 동료들</strong><p data-i="b2p">모험에서 만난 동료가 모여요. 함께할 캐릭터를 고르고 장비 도감도 봐요.</p></span></span></button>
+<button type="button" class="flip" aria-pressed="false"><span class="f"><svg viewBox="0 0 44 44" aria-hidden="true"><path d="M22 4l16 6v12c0 10-7 16-16 18C13 38 6 32 6 22V10Z" fill="#DDF6EC" stroke="#10231F" stroke-width="3" stroke-linejoin="round"/><path d="M22 12v18M14 20h16" stroke="#0F6B50" stroke-width="3" stroke-linecap="round"/></svg><b data-i="b3">길드</b><span class="st px">RESTORED</span></span><span class="b"><video muted loop playsinline preload="none" poster="img/in-guild.jpg" data-src="vid/in-guild.mp4" aria-hidden="true"></video><span class="cap"><strong data-i="b3n">접수원 세라</strong><p data-i="b3p">조건을 채우면 승급 시험을 볼 수&nbsp;있어요.</p></span></span></button>
+<button type="button" class="flip" aria-pressed="false"><span class="f"><svg viewBox="0 0 44 44" aria-hidden="true"><circle cx="22" cy="18" r="12" fill="#fff" stroke="#10231F" stroke-width="3"/><circle cx="22" cy="18" r="6" fill="#DC3E31" stroke="#10231F" stroke-width="2"/><path d="M22 30v10M14 40h16" stroke="#10231F" stroke-width="3" stroke-linecap="round"/></svg><b data-i="b4">훈련장</b><span class="st px">RESTORED</span></span><span class="b"><video muted loop playsinline preload="none" poster="img/in-train.jpg" data-src="vid/in-train.mp4" aria-hidden="true"></video><span class="cap"><strong data-i="b4n">교관 가론</strong><p data-i="b4p">새 동작 수업을 듣고, 자유 훈련으로 XP를 더&nbsp;채워요.</p></span></span></button>
+<button type="button" class="flip" aria-pressed="false"><span class="f"><svg viewBox="0 0 44 44" aria-hidden="true"><path d="M6 20h26c0 6-4 9-8 10v6h8v4H12v-4h8v-6c-6-1-11-4-14-10Z" fill="#8C979B" stroke="#10231F" stroke-width="3" stroke-linejoin="round"/><path d="M30 6l8 8-4 4-8-8Z" fill="#C57A4A" stroke="#10231F" stroke-width="2.5"/></svg><b data-i="b5">대장간</b><span class="st px">RESTORED</span></span><span class="b"><video muted loop playsinline preload="none" poster="img/in-forge.jpg" data-src="vid/in-forge.mp4" aria-hidden="true"></video><span class="cap"><strong data-i="b5n">대장장이 브룬</strong><p data-i="b5p">보스에게서 얻은 재료로 장비를 만들어&nbsp;줘요.</p></span></span></button>
+<button type="button" class="flip" aria-pressed="false"><span class="f"><svg viewBox="0 0 44 44" aria-hidden="true"><path d="M22 6v32M10 38h24M8 12h28" stroke="#10231F" stroke-width="3" stroke-linecap="round"/><path d="M8 12l-5 12h10Zm28 0l-5 12h10Z" fill="#FFE9A8" stroke="#10231F" stroke-width="2.5" stroke-linejoin="round"/></svg><b data-i="b6">교역소</b><span class="st px">RESTORED</span></span><span class="b"><video muted loop playsinline preload="none" poster="img/in-trade.jpg" data-src="vid/in-trade.mp4" aria-hidden="true"></video><span class="cap"><strong data-i="b6n">상인 마르코</strong><p data-i="b6p">남는 재료를 필요한 재료로&nbsp;바꿔요.</p></span></span></button>
+</div>
+</div>
+<button type="button" class="ph" data-zoom><video muted loop playsinline preload="none" poster="img/kingdom.jpg" data-src="vid/kingdom.mp4" aria-label="원형 성벽 안의 몸짱왕국 화면" data-ia="altKingdom"></video></button>
+</div>
+</section>
+
+<section class="band" id="run" style="background:#fff">
+<div class="wrap row">
+<div class="txt">
+<span class="tag" style="background:#FFF3C9;color:#8A5A00" data-i="rTag">러닝과 동료</span>
+<h2 class="h2" data-i="rH">달린 거리만큼<br>여정이 이어져요</h2>
+<p class="lead" data-i="rLead">러닝 거리가 쌓이면 길 위에서 뜻밖의 일을 만나고 보급 재료를 얻어요. 누적, 이번 주, 이번 달, 하루 최고 기록도 한눈에 봐요.</p>
+<div class="km"><b class="px" id="km">21.0</b><span class="px">KM</span><span data-i="kmNote" style="font-family:'Noto Sans KR';font-size:13px">예시 거리</span></div>
+<div class="road" id="road">
+<span class="done"></span><span class="hero"></span>
+<span class="pal" style="left:30%"><i style="background:#C57A4A">⚒</i><span data-i="p1">드워프</span></span>
+<span class="pal" style="left:58%"><i style="background:#46E0A5">➶</i><span data-i="p2">엘프</span></span>
+<span class="pal" style="left:86%"><i style="background:#B58CFF">✦</i><span data-i="p3">마법사</span></span>
+</div>
+<ul class="list">
+<li><span class="dot" style="background:var(--em)"></span><span data-i="r1l"><b>동료 합류</b> · 여정 중에 드워프 전사, 엘프 궁수, 현자 마법사가 차례로 합류해요.</span></li>
+<li><span class="dot" style="background:var(--em)"></span><span data-i="r2l"><b>내 캐릭터 고르기</b> · 여관에서 고른 캐릭터가 시작 화면, 퀘스트, 피버모드 코치까지 바뀌어요.</span></li>
+<li><span class="dot" style="background:var(--em)"></span><span data-i="r3l"><b>장비 120종</b> · 직업별 전용 장비 96종과 공용 장비 24종. 일반, 희귀, 전설 등급이 있어요.</span></li>
+</ul>
+</div>
+<button type="button" class="ph" data-zoom><video muted loop playsinline preload="none" poster="img/run.jpg" data-src="vid/run.mp4" aria-label="달린 거리 기록이 있는 러닝 화면" data-ia="altRun"></video></button>
+</div>
+</section>
+
+<section class="band" id="world">
+<div class="wrap row rev">
+<div class="txt">
+<span class="tag" style="background:#DDF6EC;color:#0F6B50" data-i="wTag">살아 있는 세계</span>
+<h2 class="h2" data-i="wH">아침과 밤,<br>맑은 날과 비 오는 날</h2>
+<p class="lead" data-i="wLead">시작 화면과 지도, 왕국에는 지금 시간대와 실제 날씨가 비쳐요. 비 오는 날엔 용사가 우산을 쓰고 걸어요. 화면마다 다른 레트로 배경음악도 흘러요.</p>
+<ul class="list">
+<li><span class="dot"></span><span data-i="w1"><b>몸짱일지</b> · 체중을 기록하면 그래프로 보여 주고, 달성한 업적이 날짜와 함께 쌓여요.</span></li>
+<li><span class="dot"></span><span data-i="w2"><b>기록은 안전하게</b> · 로그인하면 클라우드에 저장되고, 백업과 복원도 할 수 있어요.</span></li>
+<li><span class="dot"></span><span data-i="w3"><b>내 눈에 편하게</b> · 라이트와 다크 화면, 배경음악과 효과음 크기를 따로 맞춰요.</span></li>
+</ul>
+</div>
+<div style="flex:0 1 420px;display:flex;gap:14px;margin:0 auto;width:100%;max-width:420px">
+<button type="button" class="ph float" data-zoom style="flex:1 1 0"><video muted loop playsinline preload="none" poster="img/splash-day.jpg" data-src="vid/splash-day.mp4" aria-label="낮 시간의 시작 화면" data-ia="altDay"></video></button>
+<button type="button" class="ph float" data-zoom style="flex:1 1 0;margin-top:40px;animation-delay:-2s"><video muted loop playsinline preload="none" poster="img/splash-night.jpg" data-src="vid/splash-night.mp4" aria-label="밤 시간의 시작 화면" data-ia="altNight" style="border-color:#000"></video></button>
+</div>
+</div>
+</section>
+
+<section class="night final" id="start">
+<canvas class="sky" aria-hidden="true"></canvas>
+<div class="wrap" style="max-width:760px">
+<div class="dlg">
+<img class="face" src="img/bandi-face.jpg" alt="" aria-hidden="true">
+<div>
+<span class="who" data-i="bandi">요정 반디</span>
+<p class="say" id="ask" data-i="ask">용사님, 모험을 시작하시겠습니까?</p>
+<ul class="choices">
+<li><a class="choice sel gold-fx" id="yes" href="https://heiroku24.github.io/-/" data-i="yes">예, 시작할래요</a></li>
+<li><button type="button" class="choice" id="no" data-i="no">아니오</button></li>
+</ul>
+</div>
+</div>
+<p style="margin:26px 0 0;font-size:13px;color:#A3C4B8;text-align:center" data-i="health">통증이 있거나 건강이 걱정되면 무리하지 말고 전문가와 상의하세요.</p>
+</div>
+</section>
+</main>
+
+<footer><div class="wrap" style="padding-top:28px;padding-bottom:28px;display:flex;flex-wrap:wrap;justify-content:space-between;align-items:center;gap:8px 20px"><span data-i="copy">© 2026 나이트 멜로디 스튜디오</span><span class="flinks"><a href="../index.html" data-i="copy2">Night Melody Studio</a><a href="../privacy/index.html" data-i="fPrivacy">개인정보처리방침</a><a href="../support/index.html" data-i="fSupport">고객지원</a></span></div></footer>
+
+<div class="lb" id="lb" role="dialog" aria-modal="true" aria-label="Screenshot"><img alt=""><video muted loop playsinline></video><button type="button" aria-label="닫기" data-ia="close">×</button></div>
+
+<script src="https://cdn.jsdelivr.net/npm/matter-js@0.20.0/build/matter.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
